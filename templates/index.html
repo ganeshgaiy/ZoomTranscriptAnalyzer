@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transcript Proofreading</title>
+</head>
+<body>
+    <h1>Upload Zoom Transcript for Proofreading</h1>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="transcript" required>
+        <button type="submit">Upload</button>
+    </form>
+    {% if proofread %}
+        <h2>Proofread Transcript</h2>
+        <pre>{{ proofread }}</pre>
+    {% endif %}
+</body>
+</html>
