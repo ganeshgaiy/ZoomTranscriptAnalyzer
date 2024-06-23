@@ -15,10 +15,10 @@
         <div class="form-container">
             <form action="/upload" method="post" enctype="multipart/form-data">
                 <div class="file-upload-block">
-                    <label for="transcript" class="file-label">
+                    <label for="transcript" class="file-label" id="file-label">
                         Choose File
                     </label>
-                    <input type="file" id="transcript" name="transcript" required>
+                    <input type="file" id="transcript" name="transcript" required onchange="updateFileName()">
                     <button type="submit">Upload</button>
                 </div>
             </form>
@@ -46,6 +46,15 @@
         {% endif %}
     </div>
     <script>
+        function updateFileName() {
+            const input = document.getElementById('transcript');
+            const fileLabel = document.getElementById('file-label');
+            if (input.files.length > 0) {
+                fileLabel.textContent = input.files[0].name;
+            } else {
+                fileLabel.textContent = 'Choose File';
+            }
+        }
         const form = document.querySelector('form');
         const submitButton = form.querySelector('button[type="submit"]');
         form.addEventListener('submit', () => {

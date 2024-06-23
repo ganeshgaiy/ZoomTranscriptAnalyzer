@@ -67,7 +67,8 @@ def proofread_transcript(transcript):
             \n2.Correct any mispronounced words.
             \n3.Clarify any sentences that are unclear or awkwardly phrased.
             \n4.Ensure the overall readability and coherence of the text.
-            \n5.Maintain the original meaning and context as much as possible.:\n\n{transcript}"""}
+            \n5.Maintain the original meaning and context as much as possible.
+            \n6. Just give the corrected text with grammar and punctuation, do not give out any extra text.:\n\n{transcript}"""}
         ],
         max_tokens=2048
     )
