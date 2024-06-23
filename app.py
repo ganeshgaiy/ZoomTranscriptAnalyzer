@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, flash, redirect, render_template, request
 from openai import OpenAI
 client = OpenAI()
 
@@ -13,14 +13,24 @@ def index():
 @app.route('/upload', methods=['POST'])
 def upload_file():
     if 'transcript' not in request.files:
-        return "No file part"
+        flash('No file part')
+        return redirect(request.url)
+    
     file = request.files['transcript']
+    
     if file.filename == '':
-        return "No selected file"
+        flash('No selected file')
+        return redirect(request.url)
+    
     if file:
-        content = file.read().decode('utf-8')
-        proofread_content = proofread_transcript(content)
-        return render_template('index.html', proofread=proofread_content)
+        try:
+            content = file.read().decode('utf-8')
+            proofread_content = proofread_transcript(content)
+            return render_template('index.html', proofread=proofread_content, original=content)
+        except Exception as e:
+            flash(f'An error occurred while processing the file: {e}')
+            return redirect(request.url)
+
 
 def proofread_transcript(transcript):
     response = client.chat.completions.create(

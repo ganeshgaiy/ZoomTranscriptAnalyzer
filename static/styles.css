@@ -108,3 +108,34 @@ button:hover {
     background-color: #fff;
     border-left: 4px solid #333;
 }
+
+.transcripts-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.transcript-block {
+    flex: 1;
+    max-width: 48%;
+}
+
+.original-transcript, .proofread-transcript {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.original-transcript pre, .proofread-transcript pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+    font-family: 'Courier New', Courier, monospace;
+    padding: 10px;
+    background-color: #fff;
+    border-left: 4px solid #333;
+}
