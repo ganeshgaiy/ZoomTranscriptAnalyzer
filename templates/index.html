@@ -4,16 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transcript Proofreading</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1>Upload Zoom Transcript for Proofreading</h1>
-    <form action="/upload" method="post" enctype="multipart/form-data">
-        <input type="file" name="transcript" required>
-        <button type="submit">Upload</button>
-    </form>
-    {% if proofread %}
-        <h2>Proofread Transcript</h2>
-        <pre>{{ proofread }}</pre>
-    {% endif %}
+    <div class="navbar">
+        <a href="#" class="logo">Proofreader</a>
+    </div>
+    <div class="container">
+        <h1>Upload Zoom Transcript for Proofreading</h1>
+        <div class="form-container">
+            <form action="/upload" method="post" enctype="multipart/form-data">
+                <div class="file-upload-block">
+                    <label class="file-label">
+                        <input type="file" name="transcript" required>
+                        Choose File
+                    </label>
+                    <button type="submit">Upload</button>
+                </div>
+            </form>
+        </div>
+        {% if proofread %}
+            <h2>Proofread Transcript</h2>
+            <div class="proofread-transcript">
+                <pre>{{ proofread }}</pre>
+            </div>
+        {% endif %}
+    </div>
 </body>
 </html>
