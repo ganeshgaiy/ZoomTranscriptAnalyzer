@@ -1,10 +1,10 @@
 from flask import Flask, flash, redirect, render_template, request
 from openai import OpenAI
+import difflib
+
 client = OpenAI()
 
 app = Flask(__name__)
-
-
 
 @app.route('/')
 def index():
@@ -26,12 +26,35 @@ def upload_file():
         try:
             content = file.read().decode('utf-8')
             proofread_content = proofread_transcript(content)
-            return render_template('index.html', proofread=proofread_content, original=content)
+            diff_proofread_content = generate_inline_diff(content, proofread_content)
+            return render_template('index.html', proofread=diff_proofread_content, original=content)
         except Exception as e:
             flash(f'An error occurred while processing the file: {e}')
             return redirect(request.url)
 
 
+def generate_inline_diff(original, proofread):
+    # Split the text into words
+    original_words = original.split()
+    proofread_words = proofread.split()
+    
+    # Use SequenceMatcher to compare the word sequences
+    matcher = difflib.SequenceMatcher(None, original_words, proofread_words)
+    diff_html = ""
+    
+    for opcode in matcher.get_opcodes():
+        tag, i1, i2, j1, j2 = opcode
+        if tag == 'equal':
+            diff_html += ' ' + ' '.join(original_words[i1:i2])
+        elif tag == 'replace':
+            diff_html += ' ' + ''.join(f"<span class='diff-removed'>{word}</span>" for word in original_words[i1:i2])
+            diff_html += ' ' + ''.join(f"<span class='diff-added'>{word}</span>" for word in proofread_words[j1:j2])
+        elif tag == 'delete':
+            diff_html += ' ' + ''.join(f"<span class='diff-removed'>{word}</span>" for word in original_words[i1:i2])
+        elif tag == 'insert':
+            diff_html += ' ' + ''.join(f"<span class='diff-added'>{word}</span>" for word in proofread_words[j1:j2])
+    
+    return diff_html
 def proofread_transcript(transcript):
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
@@ -49,6 +72,20 @@ def proofread_transcript(transcript):
         max_tokens=2048
     )
     return response.choices[0].message.content
+
+def generate_diff(original, proofread):
+    diff = difflib.ndiff(original.splitlines(), proofread.splitlines())
+    diff_html = ""
+    for line in diff:
+        if line.startswith("+ "):
+            diff_html += f"<span class='diff-added'>{line[2:]}</span> "
+        elif line.startswith("- "):
+            # Removed lines will not be shown in the proofread text
+            continue
+        else:
+            diff_html += f"{line[2:]} "
+    return diff_html
+
 
 if __name__ == '__main__':
     app.run(debug=True)

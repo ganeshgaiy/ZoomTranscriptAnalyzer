@@ -26,15 +26,15 @@
         {% if proofread %}
             <div class="transcripts-container">
                 <div class="transcript-block">
-                    <h2>Original Transcript</h2>
-                    <div class="original-transcript">
-                        <pre>{{ original }}</pre>
+                    <h2>Proofread Transcript</h2>
+                    <div class="proofread-transcript">
+                        <pre>{{ proofread | safe }}</pre>
                     </div>
                 </div>
                 <div class="transcript-block">
-                    <h2>Proofread Transcript</h2>
-                    <div class="proofread-transcript">
-                        <pre>{{ proofread }}</pre>
+                    <h2>Original Transcript</h2>
+                    <div class="original-transcript">
+                        <pre>{{ original }}</pre>
                     </div>
                 </div>
             </div>
